@@ -72,7 +72,7 @@ This repository is a curated research archive, not a complete reproduction of th
 
 - Most original simulation inputs, trajectories, restart files, and simulation outputs are not yet included.
 - Figure 1's original visualization workflow has not been recovered.
-- Figure 6 contains a reconstructed energy-convergence trajectory, but two comparison-energy reference lines remain unresolved.
+- Figure 6 contains a reconstructed energy-convergence trajectory and a recovered CG-after-MD comparison. The alternating SD/CG reference remains unresolved.
 - Some experimental comparison data were digitized from published sources.
 - The correspondence between the archived RASPA elastic-property summary and the published tables has not yet been fully verified.
 - Selected historical files and third-party numerical data still require provenance and redistribution-permission review.

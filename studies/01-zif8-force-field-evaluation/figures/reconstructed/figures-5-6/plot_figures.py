@@ -29,6 +29,10 @@ DEFAULT_OUTPUT = HERE / "outputs"
 R_J_PER_MOL_K = 8.31446261815324
 KELVIN_PER_KCAL_MOL = 4184.0 / R_J_PER_MOL_K
 
+# Final energy from the archived LAMMPS CG run after 0.5 K MD (units real).
+# See README.md for the original log path and structural cross-check.
+CG_AFTER_MD_ENERGY_KCAL = -8063.30080162371
+
 
 @dataclass(frozen=True)
 class MinimizationData:
@@ -49,7 +53,9 @@ def load_minimization_data(path: Path = DEFAULT_DATA) -> MinimizationData:
       col 0: minimization step (0 to 70)
       col 1: energy in kelvin-equivalent units
       col 3: negative Hessian eigenvalue count
-    Columns 2, 4 and 5 are retained in the original data but not interpreted here.
+      col 2: supercell volume (Angstrom cubed)
+      col 4: RMS gradient (source units unverified)
+      col 5: maximum gradient (source units unverified)
     """
     raw = np.loadtxt(path, ndmin=2)
     if raw.ndim != 2 or raw.shape[1] != 6:
@@ -127,7 +133,7 @@ def figure_6a(
     *,
     show_inferred_cg: bool = True,
     sd_cg_energy_kcal: float | None = None,
-    cg_after_md_energy_kcal: float | None = None,
+    cg_after_md_energy_kcal: float | None = CG_AFTER_MD_ENERGY_KCAL,
 ) -> None:
     valid = data.steps >= 1
     fig, ax = plt.subplots(figsize=(5.9, 4.6))
@@ -156,7 +162,7 @@ def figure_6b(
     output_dir: Path,
     *,
     sd_cg_energy_kcal: float | None = None,
-    cg_after_md_energy_kcal: float | None = None,
+    cg_after_md_energy_kcal: float | None = CG_AFTER_MD_ENERGY_KCAL,
 ) -> None:
     valid = (data.steps >= 30) & (data.steps <= 70)
     fig, ax = plt.subplots(figsize=(5.9, 4.6))
@@ -186,7 +192,7 @@ def main() -> None:
                         help="Do not plot the provisional CG reference inferred from step 0")
     parser.add_argument("--sd-cg-energy-kcal", type=float, default=None,
                         help="Measured alternating steepest-descent/CG reference energy")
-    parser.add_argument("--cg-after-md-energy-kcal", type=float, default=None,
+    parser.add_argument("--cg-after-md-energy-kcal", type=float, default=CG_AFTER_MD_ENERGY_KCAL,
                         help="Measured CG reference energy after 0.5 K MD")
     args = parser.parse_args()
     data = load_minimization_data(args.data)
@@ -199,8 +205,8 @@ def main() -> None:
     print(f"Saved three figures (PDF + PNG) to: {args.output.resolve()}")
     print(f"Initial energy (provisional CG reference): {data.starting_cg_energy_kcal_mol:.6f} kcal/mol")
     print(f"Final eigenmode-following energy: {data.energy_kcal_mol[-1]:.6f} kcal/mol")
-    if args.sd_cg_energy_kcal is None or args.cg_after_md_energy_kcal is None:
-        print("Warning: comparison-energy references are incomplete; see README.md")
+    if args.sd_cg_energy_kcal is None:
+        print("Warning: blue SD/CG reference remains unverified; see README.md")
 
 
 if __name__ == "__main__":

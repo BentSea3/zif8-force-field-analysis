@@ -27,7 +27,7 @@ The available materials include:
 - [Reconstructed plotting workflows](studies/01-zif8-force-field-evaluation/figures/reconstructed/) for publication Figures 2–7, with numerical inputs, automated tests, and generated figures.
 - [Historical Jupyter notebooks](studies/01-zif8-force-field-evaluation/figures/historical-notebooks/) preserved without modification.
 
-Figure 1's original visualization workflow has not yet been recovered. Two comparison-energy references in Figure 6 remain unresolved.
+Figure 1's original visualization workflow has not yet been recovered. The alternating SD/CG comparison-energy reference in Figure 6 remains unresolved.
 
 See the [study documentation](studies/01-zif8-force-field-evaluation/) for the complete figure inventory, methodology, and limitations.
 

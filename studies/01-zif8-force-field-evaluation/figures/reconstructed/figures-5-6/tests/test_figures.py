@@ -1,6 +1,7 @@
 """Data and plotting regression checks for paper 1 minimization figures."""
 
 from pathlib import Path
+import inspect
 from tempfile import TemporaryDirectory
 import sys
 import unittest
@@ -9,7 +10,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from plot_figures import (  # noqa: E402
-    DEFAULT_DATA, KELVIN_PER_KCAL_MOL, load_minimization_data,
+    DEFAULT_DATA, KELVIN_PER_KCAL_MOL, CG_AFTER_MD_ENERGY_KCAL, load_minimization_data,
     figure_5, figure_6a, figure_6b,
 )
 
@@ -48,6 +49,12 @@ class TestArchivedData(unittest.TestCase):
                     p = output_dir / f"{name}.{ext}"
                     self.assertTrue(p.exists())
                     self.assertGreater(p.stat().st_size, 4000)
+
+    def test_verified_after_md_energy_is_default(self):
+        self.assertAlmostEqual(CG_AFTER_MD_ENERGY_KCAL, -8063.30080162371, places=8)
+        for plotter in (figure_6a, figure_6b):
+            value = inspect.signature(plotter).parameters["cg_after_md_energy_kcal"].default
+            self.assertEqual(value, CG_AFTER_MD_ENERGY_KCAL)
 
     def test_optional_comparison_lines_can_be_supplied(self):
         # Numeric inputs below are test fixtures, NOT recovered scientific values.

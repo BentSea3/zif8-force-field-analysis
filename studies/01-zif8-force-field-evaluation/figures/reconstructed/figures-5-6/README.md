@@ -10,23 +10,26 @@ Reconstruction of minimization plots used in Acuna-Yeomans et al., *Microporous 
 
 `viajeFOA/ZIF-8 flexible FF characterization/EC_minimization/min analysis/zheng2012/min_data_lammps_restart`
 
-The dataset has 71 rows, 6 columns. Identifications strongly supported by the manuscript and visual comparisons:
+The dataset has 71 rows and six columns. All 426 numerical entries match the iteration records in the archived original RASPA output:
 
 - Column 0: minimization iteration (0–70)
-- Column 1: energy in Kelvin-equivalent units (convert by `KELVIN_PER_KCAL_MOL = 4184 / R`, with `R = 8.31446261815324` J/(mol K))
-- Column 3: count of negative eigenvalues
-
-Columns 2, 4 and 5 remain unlabeled because their scientific meaning has not been established here. For the two logarithmic figures, plotting begins at iteration 1, as in the original submitted graphs; iteration 0 is still retained for checks.
+- Column 1: energy in K (convert using `KELVIN_PER_KCAL_MOL = 4184 / R`, where `R = 8.31446261815324` J/(mol K))
+- Column 2: simulation-cell volume in Å³
+- Column 3: number of negative Hessian eigenvalues
+- Column 4: RMS gradient (units not independently established)
+- Column 5: maximum gradient (units not independently established) For the two logarithmic figures, plotting begins at iteration 1, as in the original submitted graphs; iteration 0 is still retained for checks.
 
 ## Outputs and accuracy
 
 Running `plot_figures.py` creates three plots, in PNG and vector PDF formats:
 
 - `figure5_negative_eigenvalues`: reproduces the Figure 5 series and characteristic eigenvalue rebound near steps 38–51.
-- `figure6a_energy_full`: reproduces the energy series from Figure 6a and includes one **provisional, inferred** CG reference at step-0 energy (−7957.934 kcal/mol). It agrees with the approximate teal dashed line in the submitted figure but is **not independently verified** to be the underlying CG minimum.
+- `figure6a_energy_full`: reproduces the energy series and includes the teal step-0 CG-structure reference (−7957.934126 kcal/mol), evaluated by RASPA. The matching CG structure is established, but the equivalent LAMMPS energy differs because the programs' energy conventions have not been fully reconciled.
 - `figure6b_energy_zoom`: reproduces the zoomed red energy curve (steps 30–70). The CG step-0 reference is outside its range.
 
-The original figures also display two other horizontal energy comparisons: **alternating SD/CG** (blue), and **CG after 0.5 K MD** (purple). Their numeric values were **not recovered in the archive**. They are omitted by default. Do **not** infer them from plot pixels and present them as original scientific data. Once original values are found, supply them via the command-line arguments below. The code uses figure styles and ranges similar to the submitted plots, not a pixel-perfect reproduction.
+The **CG after 0.5 K MD** reference (purple) is now included by default at **−8063.30080162371 kcal/mol**, as reported in an archived LAMMPS final CG minimization with `units real`. Its relaxed lattice parameter (16.712274 Å) agrees with the manuscript (16.7122 Å).
+
+The **alternating SD/CG** reference (blue) remains omitted: the matching 16.725 Å source structure was identified, but the archived candidate energies do not establish which value was plotted. Do **not** infer the missing value from plot pixels and present it as original numerical data. The plot styles and ranges approximate the submitted manuscript; pixel-perfect reproduction is not claimed.
 
 ## Run in WSL/Linux
 
@@ -40,15 +43,13 @@ python3 -m unittest discover -s tests -v
 
 If `python3 -m pip` is constrained by your system environment, use a virtual environment (`python3 -m venv .venv`) and install there. No absolute filesystem paths are used.
 
-If independently verified reference energies become available, rerun with:
+The purple reference is plotted automatically. You can override it using `--cg-after-md-energy-kcal VALUE` for comparison. If the blue reference is independently established, supply its verified value:
 
 ```bash
-python3 plot_figures.py \
-  --sd-cg-energy-kcal MEASURED_VALUE \
-  --cg-after-md-energy-kcal MEASURED_VALUE
+python3 plot_figures.py --sd-cg-energy-kcal VERIFIED_VALUE
 ```
 
-Do not copy literal `MEASURED_VALUE`; use the verified numerical energy in kcal/mol.
+Do not substitute an image-derived estimate for `VERIFIED_VALUE`.
 
 To omit the provisional step-0 CG reference as well:
 
@@ -60,4 +61,10 @@ python3 plot_figures.py --no-inferred-cg
 
 The submission's `manuscript_main.tex` embeds `images/zheng_bakers.pdf` for Figure 5 and `images/zheng_bakers2.pdf`, `images/zheng_bakers2_zoom.pdf` for Figure 6. Its caption identifies the methods and red/teal/blue/purple conventions. The PDFs supplied in the historical archive were reviewed to choose axis limits, scales, and labels. They are **not bundled**, to separate archival reference material from reconstructed figure outputs.
 
-This project can be placed later under `studies/01-zif8-force-field-evaluation/figures/reconstructed-fig-05-06/` in the local PhD repository. Publication to GitHub should follow the existing audit and attribution checks.
+## Original calculation provenance (private archives)
+
+- **Red trajectory and teal initial energy:** `ZIF-8/22March/RASPA_wLAMMPS_output/zheng2012/1_minimizations_noMD/0GPa/Output/System_0/output_ZIF-8_2.2.2_298.000000_0.data` in the 2021 ZIF-8 backup.
+- **Purple reference:** `ZIF-8/lammps/ZIF-8-Definitive/1-Zheng2012/march22/2_minimizations_afterMD/0GPa/log.lammps` (final CG energy, after 0.5 K MD).
+- **Blue source structure:** `ZIF-8/lammps/ZIF-8-Definitive/1-Zheng2012/march22/1_minimizations_noMD/0GPa/with_nreset_atoms_relax_first/log.lammps` (mean cell edge 16.724974 Å). Its final energy was −8065.914066 kcal/mol, but is **not** assigned to the blue reference because the original plotted value is unverified.
+
+The complete historical LAMMPS/RASPA outputs remain in private backup archives pending provenance and redistribution review. These source paths document how the reconstructed values were traced; the source outputs are not packaged here.
