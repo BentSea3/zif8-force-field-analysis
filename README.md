@@ -22,12 +22,11 @@ The study compares five published flexible force fields for ZIF-8 using LAMMPS a
 
 ## Repository contents
 
-- `analysis/`: Python scripts for extracting lattice parameters from LAMMPS logs and elastic properties from RASPA output.
-- `results/`: elastic-property results recovered from archived calculations.
+- `studies/01-zif8-force-field-evaluation/analysis/`: Python scripts for extracting lattice parameters from LAMMPS logs and elastic properties from RASPA output.
+- `studies/01-zif8-force-field-evaluation/results/`: elastic-property results recovered from archived calculations.
 - `tests/`: automated tests for the analysis scripts.
 - `studies/01-zif8-force-field-evaluation/figures/`: reconstructed plotting workflows, numerical inputs, tests, and generated figures.
 
-The analysis and results directories will be moved under their corresponding study as the repository is reorganized.
 
 ## Python environment
 

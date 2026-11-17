@@ -9,7 +9,7 @@ from pathlib import Path
 
 SCRIPT = (
     Path(__file__).resolve().parents[1]
-    / "analysis/average_lammps_cell.py"
+    / "studies/01-zif8-force-field-evaluation/analysis/average_lammps_cell.py"
 )
 
 

@@ -13,9 +13,9 @@ LAMMPS and RASPA were used to investigate structural and mechanical properties, 
 
 ## Available code and data
 
-- [LAMMPS analysis](../../analysis/average_lammps_cell.py): averages lattice parameters, volume, and pressure from LAMMPS thermodynamic output.
-- [RASPA elastic analysis](../../analysis/check_raspa_elastic.py): extracts the stiffness matrix and calculates Voigt elastic moduli.
-- [RASPA elastic-property summary](../../results/raspa_elastic_summary.csv): Hill bulk and shear moduli recovered from archived minimization calculations.
+- [LAMMPS analysis](analysis/average_lammps_cell.py): averages lattice parameters, volume, and pressure from LAMMPS thermodynamic output.
+- [RASPA elastic analysis](analysis/check_raspa_elastic.py): extracts the stiffness matrix and calculates Voigt elastic moduli.
+- [RASPA elastic-property summary](results/raspa_elastic_summary.csv): Hill bulk and shear moduli recovered from archived minimization calculations.
 - [Reconstructed Figures 5 and 6](figures/reconstructed/figures-5-6/): Matplotlib plotting code, archived numerical data, tests, and generated figures.
 
 ## Validation

@@ -9,7 +9,7 @@ from pathlib import Path
 
 SCRIPT = (
     Path(__file__).resolve().parents[1]
-    / "analysis/check_raspa_elastic.py"
+    / "studies/01-zif8-force-field-evaluation/analysis/check_raspa_elastic.py"
 )
 
 
