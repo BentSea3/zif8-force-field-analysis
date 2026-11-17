@@ -36,6 +36,14 @@ The original plotting script was not recovered. The new implementation reproduce
 
 See the [figure reconstruction documentation](figures/reconstructed/figures-5-6/README.md) for details.
 
+## Historical plotting notebooks
+
+The [original plotting notebooks](figures/historical-notebooks/) are preserved unchanged, including their code cells, saved outputs, and historical file paths.
+
+These notebooks document the exploratory analysis and figure-generation work carried out during the study. Some contain intermediate versions of plots or reference files that are no longer available at their original locations.
+
+The reconstructed plotting scripts are maintained separately and include automated tests. They should not be confused with the original notebooks.
+
 ## Conference presentation
 
 Results from this research were presented at the 14th International Conference on Fundamentals of Adsorption (FOA14), Broomfield, Colorado, USA, 22–27 May 2022.
