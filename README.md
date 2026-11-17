@@ -4,7 +4,7 @@ This repository contains selected code, numerical data, and analysis workflows f
 
 The aim is to document the computational methods behind my publications, preserve useful research code, and make the associated analyses easier to reproduce.
 
-The archive is being developed one study at a time. It currently focuses on the evaluation of flexible force fields for ZIF-8.
+The archive is being developed one study at a time, with an emphasis on documenting the provenance of historical research materials and improving the reproducibility of selected workflows.
 
 ## Studies
 
@@ -16,23 +16,35 @@ E. Acuna-Yeomans, J. J. Gutierrez-Sevillano, S. Calero, and D. Dubbeldam (2023).
 
 *Microporous and Mesoporous Materials*, 348, 112406.
 
-[Publication](https://doi.org/10.1016/j.micromeso.2022.112406)
+[Publication DOI](https://doi.org/10.1016/j.micromeso.2022.112406)
 
-The study compares five published flexible force fields for ZIF-8 using LAMMPS and RASPA simulations, focusing on structural properties, elastic constants, and mechanical stability.
+This study compares five published flexible force fields for ZIF-8 using LAMMPS and RASPA simulations, focusing on structural properties, elastic constants, and mechanical stability.
 
-## Repository contents
+The available materials include:
 
-- `studies/01-zif8-force-field-evaluation/analysis/`: Python scripts for extracting lattice parameters from LAMMPS logs and elastic properties from RASPA output.
-- `studies/01-zif8-force-field-evaluation/results/`: elastic-property results recovered from archived calculations.
+- Python scripts for analyzing LAMMPS and RASPA outputs.
+- Selected numerical results recovered from archived calculations.
+- [Reconstructed plotting workflows](studies/01-zif8-force-field-evaluation/figures/reconstructed/) for publication Figures 2–7, with numerical inputs, automated tests, and generated figures.
+- [Historical Jupyter notebooks](studies/01-zif8-force-field-evaluation/figures/historical-notebooks/) preserved without modification.
+
+Figure 1's original visualization workflow has not yet been recovered. Two comparison-energy references in Figure 6 remain unresolved.
+
+See the [study documentation](studies/01-zif8-force-field-evaluation/) for the complete figure inventory, methodology, and limitations.
+
+## Repository organization
+
+- `studies/`: research materials organized by publication or study.
 - `tests/`: automated tests for the analysis scripts.
-- `studies/01-zif8-force-field-evaluation/figures/`: reconstructed plotting workflows, numerical inputs, tests, and generated figures.
+- `scripts/`: repository-level utilities, including the test runner.
+- `requirements.txt`: Python dependencies for the available analysis and plotting workflows.
 
+Each study may contain original research files, reconstructed code, numerical data, and documentation. Historical materials and newly developed implementations are identified separately.
 
 ## Python environment
 
-Requires Python 3.12.
+The available Python workflows have been tested with Python 3.12.
 
-Create and activate a virtual environment:
+Create and activate a virtual environment from the repository root:
 
 ```bash
 python3 -m venv .venv
@@ -40,27 +52,26 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-## Tests
+## Running the tests
 
-Run the analysis tests from the repository root:
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-Run the reconstructed Figures 5–6 tests:
+Run all available analysis and figure-reconstruction tests from the repository root:
 
 ```bash
-python -m unittest discover \
-    -s studies/01-zif8-force-field-evaluation/figures/reconstructed/figures-5-6/tests -v
+./scripts/run-tests.sh
 ```
+
+The test runner discovers the available test suites and returns a nonzero exit status if any suite fails.
+
+The tests cover numerical calculations, archived-data checks, and figure generation. Passing tests does not independently validate the underlying molecular simulations.
 
 ## Scope and provenance
 
 This is a curated research archive, not a complete reproduction package for the original simulations.
 
-The numerical analyses and reconstructed plotting workflows are being validated against archived research data. The underlying molecular dynamics simulations have not been rerun as part of this repository.
+The reconstructed plotting scripts generate selected publication figures from archived numerical data. They do not rerun the original LAMMPS or RASPA simulations.
 
-Historical code, simulation inputs, and third-party scientific files are being reviewed for provenance and redistribution permissions before inclusion.
+The historical notebooks preserve parts of the original research workflow, including intermediate code and saved outputs. They are not necessarily executable in a modern environment.
 
-The documentation distinguishes recovered original data from newly written or reconstructed code.
+Original simulation inputs, trajectories, restart files, and complete simulation outputs are not yet systematically included. Selected historical and third-party materials still require provenance and redistribution-permission review.
+
+The repository is being developed incrementally, with the aim of improving documentation, testing, and reproducibility while retaining a clear distinction between original research materials and reconstructed software.
