@@ -27,7 +27,10 @@ def read_thermo_blocks(path):
             fields = line.split()
 
             if fields and fields[0] == "Step":
-                if REQUIRED_COLUMNS.issubset(fields):
+                if (
+                    fields[:2] == ["Step", "Temp"]
+                    and REQUIRED_COLUMNS.issubset(fields)
+                ):
                     columns = fields
                     rows = []
                 else:
@@ -93,7 +96,7 @@ def print_all_blocks(path):
         print()
         print(
             f"Block {number}: {len(rows)} measurements, "
-            f"steps {first_step:g}-{last_step:g}"
+            f"steps {first_step:.0f}-{last_step:.0f}"
         )
 
         for column in (

@@ -110,6 +110,60 @@ Step Temp Press Volume Cella Cellb Cellc
         self.assertIn("Measurements: 1", result.stdout)
         self.assertIn("Press: 1000.0000", result.stdout)
         self.assertIn("Volume: 38000.0000", result.stdout)
+    def test_minimizations_are_excluded(self):
+        log_text = """\
+Step TotEng Volume Press Temp Cella Cellb Cellc
+0 -100 40000 0 0 34 34 34
+40 -200 39000 1000 0 33 33 33
+Loop time of 1.0 on 4 procs for 40 steps
+Minimization stats:
+
+Step TotEng Volume Press Temp Cella Cellb Cellc
+0 -200 39000 1000 0 33 33 33
+1 -200 39000 1000 0 33 33 33
+Loop time of 1.0 on 4 procs for 1 steps
+Minimization stats:
+
+Step Temp Press Volume Cella Cellb Cellc
+0 258 950 39000 33.9 33.9 33.9
+100000 258 1050 38800 33.8 33.8 33.8
+Loop time of 1.0 on 4 procs for 100000 steps
+
+Step Temp Press Volume Cella Cellb Cellc
+0 258 1000 38700 33.7 33.7 33.7
+100000 258 1000 38500 33.6 33.6 33.6
+Loop time of 1.0 on 4 procs for 100000 steps
+"""
+
+        with tempfile.TemporaryDirectory() as folder:
+            logfile = Path(folder) / "log.lammps"
+            logfile.write_text(log_text)
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    str(logfile),
+                    "--all-blocks",
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+
+        self.assertIn("Completed MD blocks: 2", result.stdout)
+        self.assertIn(
+            "Block 1: 2 measurements, steps 0-100000",
+            result.stdout,
+        )
+        self.assertIn(
+            "Block 2: 2 measurements, steps 0-100000",
+            result.stdout,
+        )
+        self.assertIn(
+            "Volume: mean=38600.0000",
+            result.stdout,
+        )
 
 if __name__ == "__main__":
     unittest.main()
