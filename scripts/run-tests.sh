@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 # Run all repository tests from any working directory.
@@ -10,7 +9,7 @@ cd "$repo_root" || exit 1
 
 test_dirs=(tests)
 
-for dir in studies/01-zif8-force-field-evaluation/figures/reconstructed/*/tests; do
+for dir in studies/*/figures/reconstructed/*/tests studies/*/simulations/*/tests; do
     if [[ -d "$dir" ]]; then
         test_dirs+=("$dir")
     fi
