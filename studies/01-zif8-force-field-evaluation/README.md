@@ -15,8 +15,9 @@ LAMMPS and RASPA were used to investigate structural and mechanical properties, 
 - [LAMMPS analysis](analysis/average_lammps_cell.py): extracts and averages lattice parameters, volume, and pressure from LAMMPS thermodynamic output.
 - [RASPA elastic analysis](analysis/check_raspa_elastic.py): extracts the stiffness matrix and calculates Voigt elastic moduli.
 - [RASPA elastic-property summary](results/raspa_elastic_summary.csv): Hill bulk and shear moduli recovered from archived minimization calculations.
+- [Pressure-stability simulation inputs](simulations/pressure-stability/): original LAMMPS inputs and Sahuaro-generated starting structures for five ZIF-8 force fields at approximately 0.1 GPa. All five were checked using zero-step initialization with LAMMPS 22 Jul 2025.
 
-These scripts were recovered and adapted from the historical research archive. They represent selected analysis workflows rather than a complete simulation pipeline.
+The analysis scripts were recovered and adapted from the historical research archive. The pressure-stability simulation inputs are unchanged copies of the original files. These materials represent selected parts of the research workflow rather than a complete simulation pipeline.
 
 ## Publication figure reconstructions
 

@@ -1,0 +1,64 @@
+# LAMMPS file for ZIF-8 flexible FF: Zhang2013
+
+# ------------------ Global settings ------------------ #
+
+units                 real
+boundary              p p p
+atom_style            full
+
+# ------------------ Model settings ------------------- #
+
+pair_style            lj/cut/coul/long 14.0 12.0
+bond_style            harmonic
+angle_style           harmonic
+dihedral_style        charmm
+improper_style        cvff
+kspace_style          ewald 1e-5
+special_bonds         lj/coul 0.0 0.0 0.5
+pair_modify           tail yes mix arithmetic
+
+# ------------------ System initialization ------------ #
+
+read_data             data.zhang2013.supercell
+
+# ------------------ Simulation settings -------------- #
+
+neighbor              2.0 bin
+neigh_modify          every 1 delay 0 check yes
+timestep              1.0
+
+# ------------------ Energy Minimization -------------- #
+
+thermo_style          custom step etotal vol press temp cella cellb cellc cellalpha cellbeta cellgamma
+thermo                1000
+fix                   1 all box/relax aniso 1000.0
+min_style             cg
+minimize              0.0 0.0 1000000 10000000
+unfix                 1
+
+reset_timestep        0
+fix                   1 all box/relax aniso 1000.0
+min_style             cg
+minimize              0.0 0.0 1000000 10000000
+unfix                 1
+
+# -----------------------npt stuff---------------------#
+
+reset_timestep        0
+velocity              all create 300.0 24824
+fix                   2 all npt temp 300.0 300.0 100.0 aniso 1000.0 1000.0 1000.0 # Pdamp = 1000.0*dt
+thermo                10000
+thermo_style          custom step temp press vol pe ke etotal ecoul evdwl cella cellb cellc cellalpha cellbeta cellgamma
+run                   1000000
+write_restart         restart.equil
+write_data            data.equil nocoeff nofix
+unfix                 2
+
+reset_timestep        0
+fix                   3 all npt temp 300.0 300.0 100.0 aniso 1000.0 1000.0 1000.0 # Pdamp = 1000.0*dt
+dump                  4 all custom 1000 dump.production.lammpstrj id mol type x y z
+thermo                1000
+run                   1000000
+write_restart         restart.final
+write_data            data.final nocoeff nofix
+unfix                 3

@@ -1,0 +1,123 @@
+# LAMMPS file for ZIF-8 flexible FF: Zheng2012
+
+# ------------------ Global settings ------------------ #
+
+units              real
+boundary           p p p
+atom_style         full
+
+# ----------------- Topology from data ---------------- #
+
+read_data          data.zheng2012.supercell.onlytopology
+
+# ------------------ Model settings ------------------- #
+
+# pair interaction information:
+pair_style   lj/cut/coul/long 14.0 12.0
+pair_coeff   1   1   0.0125   1.960   # is Zn1
+pair_coeff   2   2   0.1700   3.250   # is N1
+pair_coeff   3   3   0.0860   3.400   # is C1
+pair_coeff   4   4   0.0860   3.400   # is C2
+pair_coeff   5   5   0.1094   3.400   # is C3
+pair_coeff   6   6   0.0150   2.511   # is H2
+pair_coeff   7   7   0.0157   2.471   # is H3A
+pair_coeff   8   8   0.0157   2.471   # is H3B
+pair_coeff   9   9   0.0157   2.471   # is H3C
+
+# bond interaction information:
+bond_style   harmonic
+bond_coeff   1   346.543   1.490   # is C1-C3
+bond_coeff   2   488.000   1.335   # is C1-N1
+bond_coeff   3   440.210   1.370   # is C2-N1
+bond_coeff   4   367.000   1.080   # is C2-H2
+bond_coeff   5   540.249   1.350   # is C2-C2
+bond_coeff   6   078.500   2.011   # is Zn1-N1
+bond_coeff   7   340.000   1.090   # is C3-H3A
+bond_coeff   8   340.000   1.090   # is C3-H3B
+bond_coeff   9   340.000   1.090   # is C3-H3C
+
+# angle interaction information:
+angle_style   harmonic
+angle_coeff   1   75.484   112.16   # is N1-C1-N1
+angle_coeff   2   66.015   123.92   # is N1-C1-C3
+angle_coeff   3   73.750   108.65   # is C2-C2-N1
+angle_coeff   4   49.451   125.67   # is C2-C2-H2
+angle_coeff   5   49.954   125.68   # is N1-C2-H2
+angle_coeff   6   71.254   105.27   # is C1-N1-C2
+angle_coeff   7   48.680   128.33   # is C1-N1-Zn1
+angle_coeff   8   32.477   126.40   # is C2-N1-Zn1
+angle_coeff   9   35.240   109.48   # is N1-Zn1-N1
+angle_coeff   10  48.088   109.32   # is C1-C3-H3A
+angle_coeff   11  48.088   109.32   # is C1-C3-H3B
+angle_coeff   12  48.088   109.32   # is C1-C3-H3C
+angle_coeff   13  35.000   109.50   # is H3A-C3-H3B
+angle_coeff   14  35.000   109.50   # is H3A-C3-H3C
+angle_coeff   15  35.000   109.50   # is H3B-C3-H3C
+
+# dihedral interaction information:
+dihedral_style   charmm
+dihedral_coeff   1   2.325   2   180   0.0   # is Zn1-N1-C2-H2
+dihedral_coeff   2   2.325   2   180   0.0   # is Zn1-N1-C2-C2
+dihedral_coeff   3   2.325   2   180   0.0   # is C1-N1-C2-H2
+dihedral_coeff   4   2.325   2   180   0.0   # is C1-N1-C2-C2
+dihedral_coeff   5   5.150   2   180   0.0   # is N1-C2-C2-H2
+dihedral_coeff   6   5.150   2   180   0.0   # is N1-C2-C2-N1
+dihedral_coeff   7   5.150   2   180   0.0   # is H2-C2-C2-H2
+dihedral_coeff   8   5.000   2   180   0.0   # is C3-C1-N1-Zn1
+dihedral_coeff   9   5.000   2   180   0.0   # is C3-C1-N1-C2
+dihedral_coeff   10  5.000   2   180   0.0   # is N1-C1-N1-Zn1
+dihedral_coeff   11  5.000   2   180   0.0   # is N1-C1-N1-C2
+
+# improper interaction information:
+improper_style   harmonic
+improper_coeff   1   2.0   180.0   # is C1-N1-C3-N1
+improper_coeff   2   2.0   180.0   # is C2-N1-H2-C2
+improper_coeff   3   2.0   180.0   # is N1-Zn1-C2-C1
+
+# additional necessary info
+kspace_style       ewald 1e-5
+special_bonds      amber
+pair_modify        tail yes mix arithmetic
+
+# ------------------ Simulation settings -------------- #
+
+neighbor           2.0 bin
+neigh_modify       every 1 delay 0 check yes
+#timestep           1.0
+
+# ------------------ Energy Minimization -------------- #
+
+thermo_style       custom step etotal vol press temp cella cellb cellc cellalpha cellbeta cellgamma evdwl ecoul elong bonds ebond angles eangle dihedrals edihed impropers eimp
+thermo             10
+fix                1 all box/relax aniso 1000.0
+min_style          cg
+minimize           0.0 0.0 1000000 10000000
+unfix              1
+
+reset_timestep     0
+thermo             10
+fix                1 all box/relax aniso 1000.0
+min_style          cg
+minimize           0.0 0.0 1000000 10000000
+unfix              1
+
+# -----------------------npt stuff---------------------#
+
+reset_timestep        0
+velocity              all create 300.0 24824
+fix                   2 all npt temp 300.0 300.0 100.0 aniso 1000.0 1000.0 1000.0 # Pdamp = 1000.0*dt
+thermo                10000
+thermo_style          custom step temp press vol pe ke etotal ecoul evdwl cella cellb cellc cellalpha cellbeta cellgamma
+run                   1000000
+write_restart         restart.equil
+write_data            data.equil nocoeff nofix
+unfix                 2
+
+reset_timestep        0
+fix                   3 all npt temp 300.0 300.0 100.0 aniso 1000.0 1000.0 1000.0 # Pdamp = 1000.0*dt
+dump                  4 all custom 1000 dump.production.lammpstrj id mol type x y z
+thermo                1000
+run                   1000000
+write_restart         restart.final
+write_data            data.final nocoeff nofix
+unfix                 3

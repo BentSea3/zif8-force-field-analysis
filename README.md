@@ -72,6 +72,6 @@ The reconstructed plotting scripts generate selected publication figures from ar
 
 The historical notebooks preserve parts of the original research workflow, including intermediate code and saved outputs. They are not necessarily executable in a modern environment.
 
-Original simulation inputs, trajectories, restart files, and complete simulation outputs are not yet systematically included. Selected historical and third-party materials still require provenance and redistribution-permission review.
+Five representative pressure-stability input sets are included, but the full set of simulation inputs, trajectories, restart files, and outputs is not. Selected historical and third-party materials still require provenance and redistribution-permission review.
 
 The repository is being developed incrementally, with the aim of improving documentation, testing, and reproducibility while retaining a clear distinction between original research materials and reconstructed software.
