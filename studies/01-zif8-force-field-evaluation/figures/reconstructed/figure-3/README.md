@@ -81,6 +81,45 @@ For every point, the mean supercell lengths agree with the plotting table within
 
 The comparisons use historical processed thermodynamic data, such as `P_0.1GPa.dat`, recovered from the simulation directories. They identify the numerical sources of the plotting tables, but do not constitute independent reruns of the original simulations.
 
+### Rechecking the historical averages
+
+The comparison can be repeated using [check_provenance.py](check_provenance.py).
+
+The script reads the five archived Figure 3 plotting tables, locates the corresponding processed production-data files in `ZIF-8-Definitive`, and compares the mean supercell lengths and volumes.
+
+From this directory, run:
+
+```bash
+python check_provenance.py --archive /path/to/ZIF-8-Definitive
+```
+
+For a result at every pressure point:
+
+```bash
+python check_provenance.py --archive /path/to/ZIF-8-Definitive --details
+```
+
+The script uses only the Python standard library. It identifies pressure directories by their numerical values, so labels such as `P_0.5GPa` and `P_0.500GPa` are treated as the same pressure. If more than one matching directory exists, the script reports the ambiguity rather than selecting one arbitrarily.
+
+The checker reports missing data, malformed files, and differences larger than the rounding precision of the plotting tables. It exits with a nonzero status if the complete comparison does not pass.
+
+I ran it against the recovered historical archive and obtained:
+
+```text
+Zheng (2012)           11/11 matches
+Hu (2012)              10/10 matches
+Zhang (2013)           9/9 matches
+Wu (2014)              10/10 matches
+Weng-Schmidt (2019)    12/12 matches
+
+Total: 52/52 matching points
+Problems: 0
+```
+
+The historical processed production-data files are not included in this public repository. The complete comparison therefore requires access to a copy of the original simulation archive.
+
+Six automated tests in `tests/test_provenance.py` check the pressure-directory matching, column selection, numerical averaging, rounding tolerances, and handling of malformed or ambiguous data. These tests use small synthetic inputs and do not require the historical archive. They are run by the repository's test suite.
+
 ### Simulation temperatures
 
 The source directories were important for identifying the correct calculations.
