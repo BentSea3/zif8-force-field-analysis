@@ -6,7 +6,7 @@
 
 ## About the study
 
-This work evaluates five published flexible force fields for ZIF-8: Zheng (2012), Hu (2012), Wu (2014), Zhang (2013), and Weng–Schmidt (2019).
+This work evaluates five published flexible force fields for ZIF-8: Zheng (2012), Hu (2012), Zhang (2013), Wu (2014), and Weng–Schmidt (2019).
 
 LAMMPS and RASPA were used to investigate structural and mechanical properties, including temperature and pressure dependence, elastic constants, and mechanical stability.
 
@@ -15,6 +15,7 @@ LAMMPS and RASPA were used to investigate structural and mechanical properties, 
 - [LAMMPS analysis](analysis/average_lammps_cell.py): extracts and averages lattice parameters, volume, and pressure from LAMMPS thermodynamic output.
 - [RASPA elastic analysis](analysis/check_raspa_elastic.py): extracts the stiffness matrix and calculates Voigt elastic moduli.
 - [RASPA elastic-property summary](results/raspa_elastic_summary.csv): Hill bulk and shear moduli recovered from archived minimization calculations.
+- [Elastic-moduli provenance note](results/elastic-moduli-provenance.md): compares the recovered RASPA results with the published Table 1 and documents the remaining discrepancies.
 - [Pressure-stability simulation inputs](simulations/pressure-stability/): original LAMMPS inputs and Sahuaro-generated starting structures for five ZIF-8 force fields at approximately 0.1 GPa. All five were checked using zero-step initialization with LAMMPS 22 Jul 2025.
 
 The analysis scripts were recovered and adapted from the historical research archive. The pressure-stability simulation inputs are unchanged copies of the original files. These materials represent selected parts of the research workflow rather than a complete simulation pipeline.
@@ -65,7 +66,9 @@ From the repository root, run:
 
 The script executes the available test suites and returns a nonzero exit status if a test fails.
 
-These tests check numerical calculations, data loading, expected properties of archived datasets, and figure generation. Passing tests does not independently validate the underlying simulation results.
+The tests check numerical calculations, data loading, expected properties of archived datasets, and figure generation. Passing tests does not independently validate the underlying simulation results.
+
+At the time of this archive review, all 51 automated tests passed across seven test groups.
 
 ## Reproducibility and provenance limitations
 
@@ -75,7 +78,7 @@ This repository is a curated research archive, not a complete reproduction of th
 - Figure 1's original visualization workflow has not been recovered.
 - Figure 6 contains a reconstructed energy-convergence trajectory and a recovered CG-after-MD comparison. The alternating SD/CG reference remains unresolved.
 - Some experimental comparison data were digitized from published sources.
-- The correspondence between the archived RASPA elastic-property summary and the published tables has not yet been fully verified.
+- The recovered RASPA elastic moduli differ from some values in the published Table 1. The possible FF3/FF4 row interchange and the unresolved Hu discrepancy are discussed in the [elastic-moduli provenance note](results/elastic-moduli-provenance.md).
 - Selected historical files and third-party numerical data still require provenance and redistribution-permission review.
 
 These limitations are documented to distinguish archived research results, reconstructed analysis workflows, and independently reproducible calculations.
